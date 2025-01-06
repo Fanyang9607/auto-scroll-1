@@ -27,6 +27,16 @@
     <div class="container">
         <h2>智能阅读助手</h2>
         
+        <!-- 添加目标网页输入 -->
+        <div class="control-group">
+            <label>阅读网页</label>
+            <select id="pageMode">
+                <option value="current">当前页面</option>
+                <option value="custom">自定义网页</option>
+            </select>
+            <input type="text" id="targetUrl" placeholder="输入要阅读的网页地址" class="hidden">
+        </div>
+        
         <div class="control-group">
             <label>滚动速度</label>
             <input type="range" id="speedSlider" min="1" max="10" value="5">
@@ -46,10 +56,24 @@
             <input type="number" id="pauseTime" min="0" max="10" value="3">
         </div>
 
+        <div class="control-group">
+            <label>平台类型</label>
+            <select id="platformSelect">
+                <option value="normal">普通网页</option>
+                <option value="douyin">抖音视频</option>
+            </select>
+        </div>
+
+        <div class="control-group douyin-settings" style="display: none;">
+            <label>视频间隔(秒)</label>
+            <input type="number" id="videoInterval" min="1" max="10" value="3">
+        </div>
+
         <div class="button-group">
             <button id="startBtn" class="primary">开始阅读</button>
             <button id="pauseBtn" disabled>暂停</button>
             <button id="stopBtn" disabled>停止</button>
+            <button id="floatingBtn" class="secondary">开启悬浮窗</button>
         </div>
 
         <div class="gesture-controls">
@@ -64,7 +88,62 @@
                 → 加速
             </div>
         </div>
+
+        <div class="usage-guide">
+            <h3>使用说明</h3>
+            <ol>
+                <li>选择阅读模式：
+                    <ul>
+                        <li>当前页面：直接在当前页面启用自动滚动</li>
+                        <li>自定义网页：输入要阅读的网页地址</li>
+                    </ul>
+                </li>
+                <li>调整滚动速度和方式</li>
+                <li>点击"开始阅读"</li>
+                <li>使用手势控制：
+                    <ul>
+                        <li>上滑：开始/暂停</li>
+                        <li>下滑：停止</li>
+                        <li>左滑：减速</li>
+                        <li>右滑：加速</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
     </div>
+
+    <style>
+    .hidden {
+        display: none;
+    }
+
+    .floating-controls {
+        position: fixed;
+        top: 50%;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 10px;
+        border-radius: 10px 0 0 10px;
+        display: none;
+        z-index: 10000;
+    }
+
+    .floating-controls button {
+        display: block;
+        margin: 5px 0;
+        padding: 8px;
+        width: 40px;
+        height: 40px;
+        border-radius: 20px;
+        background: #4CAF50;
+        color: white;
+        border: none;
+    }
+
+    .floating-controls.active {
+        display: block;
+    }
+    </style>
 
     <script src="content.js"></script>
     <script>
@@ -80,6 +159,38 @@
                     });
             });
         }
+
+        // 添加页面模式切换逻辑
+        document.getElementById('pageMode').addEventListener('change', function() {
+            const targetUrl = document.getElementById('targetUrl');
+            targetUrl.classList.toggle('hidden', this.value === 'current');
+        });
+
+        // 添加平台选择逻辑
+        document.getElementById('platformSelect').addEventListener('change', function() {
+            const douyinSettings = document.querySelector('.douyin-settings');
+            douyinSettings.style.display = this.value === 'douyin' ? 'flex' : 'none';
+            
+            // 更新相关控件的显示状态
+            const speedControl = document.querySelector('.speed-control');
+            const scrollMode = document.querySelector('.scroll-mode');
+            if (this.value === 'douyin') {
+                speedControl.style.display = 'none';
+                scrollMode.style.display = 'none';
+            } else {
+                speedControl.style.display = 'flex';
+                scrollMode.style.display = 'flex';
+            }
+        });
     </script>
+
+    <div class="floating-controls">
+        <button id="floatingStartBtn">▶</button>
+        <button id="floatingPauseBtn">⏸</button>
+        <button id="floatingStopBtn">⏹</button>
+        <button id="floatingSpeedUpBtn">+</button>
+        <button id="floatingSpeedDownBtn">-</button>
+        <button id="floatingCloseBtn">×</button>
+    </div>
 </body>
 </html> 

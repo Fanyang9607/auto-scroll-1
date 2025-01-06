@@ -1,0 +1,20 @@
+{
+  "appId": "com.autoscroll.app",
+  "appName": "智能阅读助手",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    },
+    "Permissions": {
+      "permissions": [
+        "SYSTEM_ALERT_WINDOW",
+        "FOREGROUND_SERVICE"
+      ]
+    }
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+} 
