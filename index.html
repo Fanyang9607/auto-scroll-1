@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>智能阅读助手</title>
+    <link rel="stylesheet" href="popup.css">
+    <link rel="manifest" href="manifest.webmanifest">
+    
+    <!-- 添加更多 PWA 相关标签 -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="阅读助手">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="description" content="自动翻页阅读助手，支持自定义速度和手势控制">
+    
+    <!-- iOS 支持 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="阅读助手">
+    <link rel="apple-touch-icon" href="icons/icon192.png">
+    
+    <!-- 添加图标链接 -->
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="icons/icon512.png">
+</head>
+<body>
+    <div class="container">
+        <h2>智能阅读助手</h2>
+        
+        <div class="control-group">
+            <label>滚动速度</label>
+            <input type="range" id="speedSlider" min="1" max="10" value="5">
+            <span id="speedValue">5</span>
+        </div>
+
+        <div class="control-group">
+            <label>滚动方式</label>
+            <select id="scrollMode">
+                <option value="smooth">平滑滚动</option>
+                <option value="page">整页翻页</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>自动暂停时间(秒)</label>
+            <input type="number" id="pauseTime" min="0" max="10" value="3">
+        </div>
+
+        <div class="button-group">
+            <button id="startBtn" class="primary">开始阅读</button>
+            <button id="pauseBtn" disabled>暂停</button>
+            <button id="stopBtn" disabled>停止</button>
+        </div>
+
+        <div class="gesture-controls">
+            <label class="checkbox">
+                <input type="checkbox" id="enableGesture" checked>
+                启用手势控制
+            </label>
+            <div class="gesture-hint">
+                ↑ 开始/暂停
+                ↓ 停止
+                ← 减速
+                → 加速
+            </div>
+        </div>
+    </div>
+
+    <script src="content.js"></script>
+    <script>
+        // 注册 Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => {
+                        console.log('ServiceWorker 注册成功');
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker 注册失败: ', err);
+                    });
+            });
+        }
+    </script>
+</body>
+</html> 
